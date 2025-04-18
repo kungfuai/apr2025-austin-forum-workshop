@@ -263,6 +263,7 @@
                     <div class="weather-card current-weather">
                         <div class="weather-info">
                             <h2>Current Weather</h2>
+                            <h3 style="color: var(--text-secondary); font-size: 1.2rem; margin-bottom: 1rem;">Austin, TX</h3>
                             <div class="weather-stats">
                                 <div class="stat">
                                     <i class="wi wi-thermometer"></i>
@@ -432,7 +433,7 @@
                         { name: 'Austin', latitude: 30.2672, longitude: -97.7431 },
                         { name: 'Nashville', latitude: 36.1627, longitude: -86.7816 }
                     ],
-                    selectedCity: { name: 'Oklahoma City', latitude: 35.4676, longitude: -97.5164 },
+                    selectedCity: { name: 'Austin', latitude: 30.2672, longitude: -97.7431 },
                     current: {},
                     hourly: {},
                     daily: {},
@@ -448,39 +449,14 @@
                 }
             },
             methods: {
-                async getUserLocation() {
-                    return new Promise((resolve, reject) => {
-                        if (!navigator.geolocation) {
-                            reject(new Error('Geolocation is not supported by your browser'));
-                            return;
-                        }
-
-                        navigator.geolocation.getCurrentPosition(
-                            (position) => {
-                                resolve({
-                                    name: 'Your Location',
-                                    latitude: position.coords.latitude,
-                                    longitude: position.coords.longitude
-                                });
-                            },
-                            (error) => {
-                                reject(error);
-                            }
-                        );
-                    });
-                },
                 async fetchWeather() {
                     try {
                         this.loading = true;
                         this.error = null;
                         this.locationError = null;
 
-                        try {
-                            this.selectedCity = await this.getUserLocation();
-                        } catch (err) {
-                            this.locationError = 'Unable to get your location. Using default city.';
-                            console.log('Location error:', err);
-                        }
+                        // Use Austin, TX as the default location
+                        this.selectedCity = { name: 'Austin', latitude: 30.2672, longitude: -97.7431 };
 
                         const response = await fetch(`https://api.open-meteo.com/v1/forecast?latitude=${this.selectedCity.latitude}&longitude=${this.selectedCity.longitude}&current=temperature_2m,wind_speed_10m,weather_code&hourly=temperature_2m,relative_humidity_2m,wind_speed_10m,weather_code&daily=weather_code,temperature_2m_max,temperature_2m_min,precipitation_sum,wind_speed_10m_max&forecast_days=7&timezone=auto`)
                         const data = await response.json()
