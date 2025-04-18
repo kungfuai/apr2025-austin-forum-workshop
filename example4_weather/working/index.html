@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Weather • Dashboard</title>
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@3.9.1/dist/chart.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-annotation@1.4.0/dist/chartjs-plugin-annotation.min.js"></script>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/weather-icons/2.0.12/css/weather-icons.min.css">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div id="app">
+        <div class="background-image" v-if="current.weather_code" :style="{'background-image': `url(${getWeatherImage(current.weather_code)})`}"></div>
+        <div class="dashboard">
+            <div class="header">
+                <h1>Weather Dashboard</h1>
+                <div v-if="locationError" class="error" style="margin: 0;">
+                    {{ locationError }}
+                </div>
+            </div>
+
+            <div v-if="loading" class="loading">
+                Loading weather data...
+            </div>
+
+            <div v-else-if="error" class="error">
+                {{ error }}
+            </div>
+
+            <div v-else>
+                <div class="weather-grid">
+                    <div class="weather-card current-weather">
+                        <div class="weather-info">
+                            <h2>Current Weather</h2>
+                            <h3 style="color: var(--text-secondary); font-size: 1.2rem; margin-bottom: 1rem;">Austin, TX</h3>
+                            <div class="weather-stats">
+                                <div class="stat">
+                                    <i class="wi wi-thermometer"></i>
+                                    {{ celsiusToFahrenheit(current.temperature_2m) }}°F
+                                </div>
+                                <div class="stat">
+                                    <i class="wi wi-strong-wind"></i>
+                                    {{ current.wind_speed_10m }} km/h
+                                </div>
+                                <div class="stat">
+                                    <i class="wi wi-cloud"></i>
+                                    {{ getWeatherDescription(current.weather_code) }}
+                                </div>
+                            </div>
+                        </div>
+                        <div class="weather-image" :style="{'background-image': `url(${getWeatherImage(current.weather_code)})`}"></div>
+                    </div>
+
+                    <div class="weather-card">
+                        <h2>7-Day Forecast</h2>
+                        <div class="forecast-grid">
+                            <div 
+                                v-for="index in 7" 
+                                :key="index"
+                                class="forecast-card"
+                                @click="showHourlyTemperature(daily.time[index-1])"
+                                :class="{ 'disabled': chartLoading }"
+                                :style="chartLoading ? 'cursor: not-allowed; opacity: 0.7;' : 'cursor: pointer;'"
+                            >
+                                <div class="forecast-time">{{ formatDate(daily.time[index-1]) }}</div>
+                                <div class="forecast-icon" v-html="getWeatherIcon(daily.weather_code[index-1])"></div>
+                                <div class="forecast-temp">{{ celsiusToFahrenheit(daily.temperature_2m_max[index-1]) }}°F</div>
+                                <div class="forecast-detail">H: {{ celsiusToFahrenheit(daily.temperature_2m_max[index-1]) }}°F | L: {{ celsiusToFahrenheit(daily.temperature_2m_min[index-1]) }}°F</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div v-if="showTemperatureChart" class="temperature-chart">
+                    <h2>24-Hour Temperature: {{ selectedDateFormatted }}</h2>
+                    <div v-if="hourlyDataError" class="error">
+                        {{ hourlyDataError }}
+                    </div>
+                    <div style="height: 300px; position: relative; margin-top: 15px;">
+                        <canvas id="temperature-chart"></canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
