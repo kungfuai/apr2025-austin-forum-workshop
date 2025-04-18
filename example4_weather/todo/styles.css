@@ -186,15 +186,6 @@ select:hover {
     color: var(--text-secondary);
 }
 
-.temperature-chart {
-    background: var(--bg-card);
-    border-radius: 20px;
-    padding: 2rem;
-    margin-top: 2rem;
-    backdrop-filter: blur(10px);
-    border: 1px solid var(--border);
-}
-
 .loading {
     text-align: center;
     padding: 2rem;
