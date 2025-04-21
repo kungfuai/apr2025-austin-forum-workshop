@@ -1,2 +1,0 @@
-build a web dashboard template. use frameworks and make css/js files if needed. don't use node. use cdn-based vuejs.
-

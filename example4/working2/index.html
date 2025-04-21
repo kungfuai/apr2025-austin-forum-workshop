@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Weather Dashboard</title>
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://cdn.jsdelivr.net/npm/@mdi/font@7.4.47/css/materialdesignicons.min.css" rel="stylesheet">
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+    <div id="app">
+        <div class="dashboard">
+            <aside class="sidebar">
+                <div class="logo">
+                    <h2>Weather</h2>
+                </div>
+                <nav>
+                    <ul>
+                        <li v-for="item in menuItems" :key="item.id" :class="{ active: activeItem === item.id }">
+                            <i :class="item.icon"></i>
+                            <span>{{ item.text }}</span>
+                        </li>
+                    </ul>
+                </nav>
+            </aside>
+            <main class="main-content">
+                <header class="header">
+                    <div class="search-bar">
+                        <input type="text" v-model="location" placeholder="Enter location..." @keyup.enter="searchLocation">
+                    </div>
+                    <div class="user-info">
+                        <i class="mdi mdi-refresh" @click="refreshWeather"></i>
+                        <div class="user-profile">
+                            <span>{{ currentTime }}</span>
+                        </div>
+                    </div>
+                </header>
+                <div class="content">
+                    <div class="current-weather">
+                        <div class="weather-main">
+                            <h2>{{ currentLocation }}</h2>
+                            <div class="temperature">
+                                <span class="temp-value">{{ currentTemp }}°</span>
+                                <span class="temp-desc">{{ currentDesc }}</span>
+                            </div>
+                            <div class="weather-details">
+                                <div class="detail">
+                                    <i class="mdi mdi-weather-windy"></i>
+                                    <span>{{ windSpeed }} mph</span>
+                                </div>
+                                <div class="detail">
+                                    <i class="mdi mdi-water"></i>
+                                    <span>{{ humidity }}%</span>
+                                </div>
+                                <div class="detail">
+                                    <i class="mdi mdi-weather-cloudy"></i>
+                                    <span>{{ cloudCover }}%</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="forecast-container">
+                        <h3>5-Day Forecast</h3>
+                        <div class="forecast-grid">
+                            <div class="forecast-card" v-for="day in forecast" :key="day.date">
+                                <div class="forecast-day">{{ day.day }}</div>
+                                <i :class="day.icon"></i>
+                                <div class="forecast-temp">
+                                    <span class="high">{{ day.high }}°</span>
+                                    <span class="low">{{ day.low }}°</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="chart-container">
+                        <h3>7-Day Temperature Forecast</h3>
+                        <canvas id="temperatureChart"></canvas>
+                    </div>
+                </div>
+            </main>
+        </div>
+    </div>
+    <script src="app.js"></script>
+</body>
+</html> 

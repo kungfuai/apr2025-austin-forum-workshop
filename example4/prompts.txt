@@ -1,0 +1,9 @@
+build a web dashboard template. use frameworks and make html/css/js files if needed. don't use node. use cdn-based vuejs.
+
+make it a weather dashboard for austin, tx. use fake data.
+
+use the api (https://api.open-meteo.com/v1/forecast) to get real data.
+
+convert to fahrenheit
+
+plot hour-by-hour temperatures for the next 7 days.
