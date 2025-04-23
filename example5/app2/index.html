@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Music Player</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Music Player</h1>
+        <div class="player">
+            <div class="album-art">
+                <img src="https://picsum.photos/300/300" alt="Album Art" id="albumArt">
+            </div>
+            <div class="song-info">
+                <h2 id="songTitle">Select a song</h2>
+                <p id="artist">-</p>
+            </div>
+            <div class="controls">
+                <button id="prevButton">⏮</button>
+                <button id="playButton">▶</button>
+                <button id="nextButton">⏭</button>
+            </div>
+            <div class="progress-container">
+                <div class="progress-bar">
+                    <div class="progress" id="progress"></div>
+                </div>
+                <div class="time">
+                    <span id="currentTime">0:00</span>
+                    <span id="duration">0:00</span>
+                </div>
+            </div>
+            <div class="volume-container">
+                <span>🔊</span>
+                <input type="range" id="volumeSlider" min="0" max="100" value="100">
+            </div>
+        </div>
+        <div class="playlist">
+            <h3>Playlist</h3>
+            <ul id="songList"></ul>
+        </div>
+    </div>
+    <script src="script.js"></script>
+</body>
+</html> 
