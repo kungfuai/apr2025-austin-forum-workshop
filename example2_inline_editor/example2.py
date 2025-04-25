@@ -3,6 +3,7 @@ import openai
 import pandas as pd
 import matplotlib.pyplot as plt
 
+# bind and separate prompts.
 def call_model(model, prompt):
     openai.api_key = "sk-proj-1234567890"
     response = openai.ChatCompletion.create(
@@ -11,9 +12,11 @@ def call_model(model, prompt):
     )
     return response.choices[0].message.content
 
+# return a typed dict.
 def parse_json(json_str) -> dict:
     return json.loads(json_str)
 
+# Add titles.
 def plot_over_time(df: pd.DataFrame, x: str, y: str) -> None:
     plt.figure(figsize=(10, 5))
     plt.plot(df[x], df[y])
