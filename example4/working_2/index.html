@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Austin Weather Dashboard</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://cdn.jsdelivr.net/npm/@mdi/font@7.4.47/css/materialdesignicons.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/vue@3.3.4/dist/vue.global.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+    <div id="app">
+        <div class="dashboard">
+            <aside class="sidebar">
+                <div class="logo">
+                    <h2>Austin Weather</h2>
+                </div>
+                <nav class="nav">
+                    <a v-for="item in menuItems" :key="item.id" :href="item.link" class="nav-item">
+                        <i :class="item.icon"></i>
+                        <span>{{ item.text }}</span>
+                    </a>
+                </nav>
+            </aside>
+            <main class="main-content">
+                <header class="header">
+                    <div class="header-left">
+                        <button class="menu-toggle" @click="toggleSidebar">
+                            <i class="mdi mdi-menu"></i>
+                        </button>
+                        <h1>{{ currentPage }}</h1>
+                    </div>
+                    <div class="header-right">
+                        <div class="user-menu">
+                            <div class="location-info">
+                                <i class="mdi mdi-map-marker"></i>
+                                <span>Austin, TX</span>
+                            </div>
+                            <div class="current-time">
+                                {{ currentTime }}
+                            </div>
+                        </div>
+                    </div>
+                </header>
+                <div class="content">
+                    <div class="current-weather">
+                        <div class="weather-main">
+                            <div class="temperature">
+                                <h2>{{ currentWeather.temperature }}°F</h2>
+                                <p>{{ currentWeather.condition }}</p>
+                            </div>
+                            <div class="weather-icon">
+                                <i :class="currentWeather.icon"></i>
+                            </div>
+                        </div>
+                        <div class="weather-details">
+                            <div class="detail-item">
+                                <i class="mdi mdi-water"></i>
+                                <span>Humidity: {{ currentWeather.humidity }}%</span>
+                            </div>
+                            <div class="detail-item">
+                                <i class="mdi mdi-weather-windy"></i>
+                                <span>Wind: {{ currentWeather.wind }} mph</span>
+                            </div>
+                            <div class="detail-item">
+                                <i class="mdi mdi-weather-sunny"></i>
+                                <span>UV Index: {{ currentWeather.uvIndex }}</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="stats-grid">
+                        <div v-for="stat in stats" :key="stat.id" class="stat-card">
+                            <div class="stat-icon" :class="stat.color">
+                                <i :class="stat.icon"></i>
+                            </div>
+                            <div class="stat-info">
+                                <h3>{{ stat.value }}</h3>
+                                <p>{{ stat.label }}</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="charts-container">
+                        <div class="chart-card">
+                            <h3>Hourly Temperature Forecast</h3>
+                            <div class="chart-container">
+                                <canvas ref="temperatureChart"></canvas>
+                            </div>
+                        </div>
+                        <div class="chart-card">
+                            <h3>Air Quality</h3>
+                            <div class="air-quality">
+                                <div class="aqi-value" :class="airQuality.class">
+                                    {{ airQuality.value }}
+                                </div>
+                                <p>{{ airQuality.status }}</p>
+                                <div class="pollutants">
+                                    <div v-for="pollutant in airQuality.pollutants" :key="pollutant.name" class="pollutant">
+                                        <span class="name">{{ pollutant.name }}</span>
+                                        <span class="value">{{ pollutant.value }}</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </main>
+        </div>
+    </div>
+    <script src="script.js"></script>
+</body>
+</html>
