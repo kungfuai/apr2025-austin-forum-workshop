@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Austin Weather Dashboard</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="https://unpkg.com/vue@3/dist/vue.global.prod.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <!-- Font Awesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+</head>
+<body>
+    <div id="app">
+        <div class="dashboard">
+            <!-- Sidebar -->
+            <aside class="sidebar">
+                <div class="logo">
+                    <i class="fas fa-cloud-sun"></i>
+                    <span>Austin Weather</span>
+                </div>
+                <nav>
+                    <ul>
+                        <li v-for="item in menuItems" :key="item.id" :class="{ active: activeItem === item.id }">
+                            <a href="#" @click="setActive(item.id)">
+                                <i :class="item.icon"></i>
+                                <span>{{ item.name }}</span>
+                            </a>
+                        </li>
+                    </ul>
+                </nav>
+            </aside>
+
+            <!-- Main Content -->
+            <main class="main-content">
+                <header class="top-bar">
+                    <div class="location-info">
+                        <h1>Austin, TX</h1>
+                        <p class="last-updated">Last updated: {{ lastUpdated }}</p>
+                    </div>
+                    <div class="search-bar">
+                        <i class="fas fa-search"></i>
+                        <input type="text" placeholder="Search location...">
+                    </div>
+                </header>
+
+                <div v-if="error" class="error-message">
+                    <i class="fas fa-exclamation-circle"></i>
+                    <p>{{ error }}</p>
+                </div>
+
+                <div v-else-if="loading" class="loading-container">
+                    <div class="loading-spinner">
+                        <i class="fas fa-cloud-sun fa-spin"></i>
+                        <p>Loading weather data...</p>
+                    </div>
+                </div>
+
+                <div v-else class="content">
+                    <div class="current-weather">
+                        <div class="main-temp">
+                            <h2>{{ currentWeather.temperature }}</h2>
+                            <p>{{ currentWeather.condition }}</p>
+                            <p>Feels like {{ currentWeather.feelsLike }}</p>
+                        </div>
+                        <div class="weather-details">
+                            <div class="detail-item">
+                                <i class="fas fa-tint"></i>
+                                <span>Humidity: {{ currentWeather.humidity }}</span>
+                            </div>
+                            <div class="detail-item">
+                                <i class="fas fa-wind"></i>
+                                <span>Wind: {{ currentWeather.wind }}</span>
+                            </div>
+                            <div class="detail-item">
+                                <i class="fas fa-sun"></i>
+                                <span>UV Index: {{ currentWeather.uvIndex }}</span>
+                            </div>
+                            <div class="detail-item">
+                                <i class="fas fa-sun"></i>
+                                <span>Sunrise: {{ currentWeather.sunrise }}</span>
+                            </div>
+                            <div class="detail-item">
+                                <i class="fas fa-moon"></i>
+                                <span>Sunset: {{ currentWeather.sunset }}</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="stats-grid">
+                        <div class="stat-card" v-for="stat in stats" :key="stat.id">
+                            <div class="stat-icon" :style="{ backgroundColor: stat.color }">
+                                <i :class="stat.icon"></i>
+                            </div>
+                            <div class="stat-info">
+                                <h3>{{ stat.value }}</h3>
+                                <p>{{ stat.label }}</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="temperature-chart">
+                        <h2>7-Day Temperature Forecast</h2>
+                        <div class="chart-container">
+                            <canvas id="temperatureChart"></canvas>
+                        </div>
+                    </div>
+
+                    <div class="forecast-container">
+                        <div class="hourly-forecast">
+                            <h2>Hourly Forecast</h2>
+                            <div class="hourly-items">
+                                <div v-for="hour in hourlyForecast" :key="hour.id" class="hourly-item">
+                                    <span class="time">{{ hour.time }}</span>
+                                    <i :class="hour.icon"></i>
+                                    <span class="temp">{{ hour.temp }}</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="daily-forecast">
+                            <h2>5-Day Forecast</h2>
+                            <div class="daily-items">
+                                <div v-for="day in dailyForecast" :key="day.id" class="daily-item">
+                                    <span class="day">{{ day.day }}</span>
+                                    <i :class="day.icon"></i>
+                                    <div class="temps">
+                                        <span class="high">{{ day.high }}</span>
+                                        <span class="low">{{ day.low }}</span>
+                                    </div>
+                                    <span class="condition">{{ day.condition }}</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="alerts-container" v-if="weatherAlerts.length > 0">
+                        <h2>Weather Alerts</h2>
+                        <div class="alerts-list">
+                            <div v-for="alert in weatherAlerts" :key="alert.id" class="alert-item">
+                                <i :class="alert.icon"></i>
+                                <div class="alert-details">
+                                    <p>{{ alert.description }}</p>
+                                    <span class="time">{{ alert.time }}</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </main>
+        </div>
+    </div>
+    <script src="script.js"></script>
+</body>
+</html>

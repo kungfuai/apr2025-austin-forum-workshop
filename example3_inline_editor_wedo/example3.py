@@ -2,19 +2,16 @@ import math
 
 class Calculator:
     def __init__(self):
-        self.result = 0
+        pass
 
     # Idea: be able to pass in any number of arguments and sum them up.
-    # Idea: Refactor to add to `self.result`, or make another method to do so.
     def add(self, x, y):
         return x + y
 
     # Idea: be able to pass in any number of arguments and multiply them.
-    # Idea: Refactor to add to `self.result`, or make another method to do so.
     def multiply(self, x, y):
         return x * y
 
-    # Idea: Refactor or add another method to do the factorial of `self.result`.
     def factorial(self, x):
         if x < 0:
             raise ValueError("Cannot calculate factorial of negative number")
@@ -24,14 +21,11 @@ class Calculator:
 
     # Idea: Add operations, like square root. Include input validation.
 
-    def clear(self):
-        self.result = 0
-
-    # Idea: A print method that prints the result.
-
 
 if __name__ == "__main__":
     calc = Calculator()
+    # Idea: Refactor this method to take a bunch of numbers rather than just 2.
     print(calc.add(1, 2))
+    # Idea: Refactor this method to take a bunch of numbers rather than just 2.
     print(calc.multiply(3, 4))
-    print(calc.factorial(5))
+
